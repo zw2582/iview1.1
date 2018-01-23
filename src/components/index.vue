@@ -17,9 +17,9 @@
     left: 20px;
 }
 .layout-nav{
-    width: 420px;
+    width: 460px;
     margin: 0 auto;
-    margin-right: 20px;
+    margin-right:20px;
 }
 </style>
 <template>
@@ -45,6 +45,7 @@
                             <Icon type="ios-paper"></Icon>
                             Item 4
                         </MenuItem>
+                        <Button type="primary" @click="loginOut">退出</Button>
                     </div>
                 </Menu>
             </Header>
@@ -94,7 +95,20 @@
     </div>
 </template>
 <script>
+import API from '@/api/api_user.js'
+    
     export default {
-        
+        methods:{
+        	loginOut(){
+        		API.loginOut().then((result)=>{
+        			if (result.status == 1) {
+        				this.$router.push('/login')
+        			} 
+        			this.$Message.success(result.message)
+        		}, (err)=>{
+        			this.$Message.error(err)
+        		})
+        	}
+        }
     }
 </script>

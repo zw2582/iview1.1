@@ -17,6 +17,27 @@ float:right;
 		</Form>
 		
 		<Table ref="chemList" size="large" :loading="loading" :columns="column" :data="data"></Table>
+		<Poptip placement="right-start" width="450" :transfer="true" title="添加商品">
+			<Button type="primary">新增</Button>
+			<div class="product_add" slot="content">
+				<Form ref="proAdd" :label-width="80" :model="addform" :rules="ruleProAdd">
+					<FormItem prop="number" label="商品编号">
+						<Input v-model="addform.number" placeholder="P00001"/>
+					</FormItem>
+					<FormItem prop="name" label="商品名称">
+						<Input v-model="addform.name" placeholder="底裤"/>
+					</FormItem>
+					<FormItem label="描述">
+						<Input v-model="addform.description" type="textarea" :autosize="{minRows:2,maxRows:5}" placeholder="为您的商品来个美美的描述"/>
+					</FormItem>
+					<FormItem>
+						<Button @click="productAdd" type="primary">新增</Button>
+						<Button type="ghost" style="margin-left:25px">取消</Button>
+					</FormItem>
+				</Form>
+			</div>
+		</Poptip>
+		
 		<Page class="page" :total="total" show-sizer show-elevator 
 			show-total @on-change="pageChange" @on-page-size-change="sizeChange"></Page>
 	</div>
@@ -35,6 +56,19 @@ export default{
 			search:{
 				number:''
 			},
+			addform:{
+				name:'',
+				number:'',
+				description:''
+			},
+			ruleProAdd:{
+				name:[
+					{required:true,message:'请输入商品名称',trigger:'blur'}
+				],
+				number:[
+					{required:true,message:'请输入商品编号',trigger:'blur'}
+				]
+			},
 			column:[{
 				type:'selection',
 				width:60,
@@ -43,32 +77,17 @@ export default{
 				title:'商品编号',
 				key:'number'
 			},{
-				title:'中文名称',
-				key:'cn_name'
+				title:'商品名称',
+				key:'name'
 			},{
-				title:'CAS号',
-				key:'cas'
-			},{
-				title:'品牌',
-				key:'brand'
-			},{
-				title:'纯度',
-				key:'purity'
-			},{
-				title:'包装规格',
-				key:'package'
-			},{
-				title:'价格',
-				key:'price'
-			},{
-				title:'库存',
-				key:'stock'
-			},{
-				title:'备货期',
-				key:'stock_time'
-			},{
-				title:'状态',
+				title:'上下架',
 				key:'status'
+			},{
+				title:'创建人',
+				key:'username'
+			},{
+				title:'创建时间',
+				key:'create_time'
 			},{
 				title:'操作',
 				key:'stock_time'
@@ -85,16 +104,37 @@ export default{
 				size:that.size
 			}
 			params = merge(params, that.search)
-			console.log(params)
 			API.chemList(params).then(function(result){
-				let data = result.data
-				that.$set(that, 'loading', false)
-				that.$set(that, 'data', data.chemList)
-				that.$set(that, 'total', data.total)
+				if (result.status == 1) {
+					let data = result.data
+					that.$set(that, 'loading', false)
+					that.$set(that, 'data', data.data)
+					that.$set(that, 'total', parseInt(data.total))
+				}
 			},function(err){
 				that.$set(that, 'loading', false)
 				console.log(err);
 			});
+		},
+		productAdd() {
+			let that = this;
+			this.$refs['proAdd'].validate((valid)=>{
+				if(valid) {
+					API.add(this.addform).then(function(result){
+						if (result.status == 1) {
+							that.$Message.success(result.message)
+							that.chemList()
+						} else {
+							that.$Message.error(result.message)
+						}
+					},function(err){
+						that.$message.error(err)
+					})
+				} else {
+					that.$Message.error('参数校验失败')
+				}
+			})
+			
 		},
 		pageChange(page){
 			this.$set(this, 'page', page)

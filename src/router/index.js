@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Main from '@/components/Main'
 import Index from '@/components/index'
+import Login from '@/components/Login'
 
 Vue.use(Router)
 
@@ -13,7 +14,7 @@ export default new Router({
       component: Main
     },
     {
-    	path:'/',
+    	path:'/index',
     	component: Index,
     	children:[
     		{
@@ -26,6 +27,11 @@ export default new Router({
     			component: (resolve) => require(['@/components/product/ChemList'], resolve)
     		}
     	]
+    },
+    {
+    	path:'/',
+    	alias: '/login',
+    	component: Login
     }
   ]
 })
