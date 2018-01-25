@@ -12,6 +12,8 @@ Vue.config.productionTip = false
 Vue.use(iView)
 Vue.use(VueResource)
 
+Vue.prototype.picUrl='http://dev.picture.integle.com'
+
 router.beforeEach((to, from, next)=>{
 	iView.LoadingBar.start();
 	next();

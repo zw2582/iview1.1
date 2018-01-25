@@ -11,5 +11,8 @@ export default {
 	add:params=>{
 		console.log('post product add');
 		return API.POST('/product/product/add', params);
+	},
+	listPackageType(){
+		return API.GET('/product/product/list-package-type')
 	}
 }

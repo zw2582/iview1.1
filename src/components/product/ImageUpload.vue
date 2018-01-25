@@ -79,14 +79,8 @@ export default{
 	data(){
 		return {
 			uploadList:[],
-			defaultList:[{
-				'name':'1.jpg',
-				'url':'http://dev.picture.integle.com/site/index?src=0002_60_60_1.jpg',
-				'deep_path':'0002',
-				'save_name':'1.jpg',
-				'real_name':'1.jpg',
-				'pic_url':'http://dev.picture.integle.com'
-			}],
+			//name,url,deep_path,save_name,real_name,raw_url
+			defaultList:[],
 			max_size:5,
 			visible:false,
 			modelImgUrl:''
@@ -94,7 +88,7 @@ export default{
 	},
 	methods:{
 		handleView(file) {
-			this.modelImgUrl = file.pic_url+'/site/index?src='+file.deep_path+'_'+file.save_name;
+			this.modelImgUrl = file.raw_url;
 			this.visible=true;
 		},
 		handleRemove(file) {
@@ -110,7 +104,7 @@ export default{
 				file.deep_path = data.deep_path;
 				file.save_name = data.save_name;
 				file.real_name = data.real_name;
-				file.pic_url = data.pic_url;
+				file.raw_url = data.pic_url+'/site/index?src='+file.deep_path+'_'+file.save_name;
 			} else {
 				this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
 				this.$Notice.warning({

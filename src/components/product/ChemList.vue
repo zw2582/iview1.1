@@ -37,15 +37,25 @@ export default{
 		return {
 			loading:false,
 			page:1,
-			size:5,
+			size:10,
 			total:0,
 			search:{
 				number:''
 			},
 			column:[{
 				type:'selection',
-				width:60,
+				width:30,
 				align:'center'
+			},{
+				width:100,
+				title:'商品图片',
+				key:'img',
+				render:(h, params)=>{
+					let imgurl = 'http://dev.picture.integle.com/'+params.row.save_path+'_50_50_'+params.row.save_name;
+					return (
+						<img src={imgurl} width="50" height="50"/>
+					)
+				}
 			},{
 				title:'商品编号',
 				key:'number'
@@ -53,13 +63,29 @@ export default{
 				title:'商品名称',
 				key:'name'
 			},{
+				title:'价格',
+				width:120,
+				key:'price',
+				render:(h, params)=>{
+					return(
+					<span style="color:#ff9900">{'￥'+params.row.price/100}</span>
+					)
+				}
+			},{
 				title:'上下架',
-				key:'status'
+				width:120,
+				key:'status',
+				render:(h, params)=>{
+					return(
+					<i-switch value={params.row.status==1}></i-switch>
+					)
+				}
 			},{
 				title:'创建人',
 				key:'username'
 			},{
 				title:'创建时间',
+				width:200,
 				key:'create_time'
 			},{
 				title:'操作',
