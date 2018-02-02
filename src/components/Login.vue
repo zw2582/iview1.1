@@ -22,6 +22,7 @@
 			
 			<FormItem>
 				<Button type="primary" @click="handleSubmit('formInline')">登录</Button>
+				<router-link to="/register">注册</router-link>
 			</FormItem>
 		</Form>
 	</div>

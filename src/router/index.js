@@ -32,6 +32,9 @@ export default new Router({
     	path:'/',
     	alias: '/login',
     	component: Login
-    }
+    },{
+		  path:'/register',
+		  component: (resolve)=>require(['@/components/Register'], resolve)
+	  }
   ]
 })
